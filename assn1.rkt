@@ -1,6 +1,8 @@
 #lang typed/racket
 (require typed/rackunit)
 
+; translates a given LC s expression into java script
+; it should be mostly valid
 (: translate (Sexp -> String))
 (define (translate text)
   (match text
@@ -66,11 +68,7 @@
               "(((function(x) { return x; })(5)) <= 0) ? y : z")
 (check-equal? (translate '(println (+ 5 5))) "console.log((5 + 5))")
 
-(translate
- '((((lambda (x) (lambda (y) (lambda (z) (+ (x z) y)))) (lambda (a) (* a 2))) 2) 3))
-(translate
- '((((lambda (x) (lambda (y) (lambda (z) (+ (x z) y)))) (lambda (a) (* a 2))) 2) (println 5)))
-
+; translates a given file of a single LC s expression to mostly valid javascript
 (: translateFile (String -> String))
 (define (translateFile fileName)
   (translate (cast (file->value fileName) Sexp)))
